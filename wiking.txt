@@ -1,0 +1,45 @@
+1.
+CREATE TABLE postac (id_postaci INT PRIMARY KEY auto_increment, nazwa VARCHAR(40), rodzaj ENUM('wiking','ptak','kobieta'), data_ur DATE, wiek INT UNSIGNED);
+INSERT INTO postac VALUES (NULL, 'Bjorn', 'wiking', '1990-01-10', '145');
+CREATE TABLE postac VALUES (NULL, 'Drozd', 'ptak', NULL, '1');
+CREATE TABLE postac VALUES (NULL, 'Tesciowa', 'kobieta', '1932-03-05', '80');
+UPDATE postac SET wiek=88 WHERE nazwa = 'Tesciowa';
+_____________________________________________________
+2.
+CREATE TABLE walizka (id_walizki INT auto_increment PRIMARY KEY, pojemnosc INT UNSIGNED, kolor ENUM('rozowy','czerwony','teczowy','zolty'), id_wlasciciela INT, FOREIGN KEY (id_wlasciciela) REFERENCES postac (id_postaci));
+ALTER TABLE walizka DROP FOREIGN KEY walizka_ibfk_1;
+ALTER TABLE walizka ADD FOREIGN KEY (id_wlasciciela) REFERENCES postac (id_postaci) ON DELETE CASCADE;
+ALTER TABLE walizka ALTER kolor set DEFAULT 'rozowy';
+INSERT INTO walizka VALUES (DEFAULT, 30, 'czerwony', 1);
+INSERT INTO walizka VALUES (DEFAULT, 30, DEFAULT, 2);
+_____________________________________________________
+3.
+CREATE TABLE izba (adres_budynku VARCHAR(50), nazwa_izby VARCHAR(40), metraz INT UNSIGNED, wlasciciel INT, PRIMARY KEY (adres_budynku, nazwa_izby), FOREIGN KEY (wlasciciel) REFERENCES postac(id_postaci) ON DELETE SET NULL);
+ALTER TABLE izba ADD kolor_izby VARCHAR(40) DEFAULT 'czarny' AFTER metraz;
+INSERT INTO izba VALUES ('Lesna 8', 'Spizarnia', 15, DEFAULT, 1);
+_____________________________________________________
+4.
+CREATE TABLE przetwory (id_przetworu INT PRIMARY KEY auto_increment, rok_produkcji INT DEFAULT 1654, id_wykonawcy INT, zawartosc VARCHAR(70), dodatek VARCHAR(70) DEFAULT 'papryczka chilli', id_konsumenta INT, FOREIGN KEY (id_wykonawcy) REFERENCES postac(id_postaci), FOREIGN KEY (id_konsumenta) REFERENCES postac(id_postaci));
+INSERT INTO przetwory VALUES (NULL, DEFAULT, 1, 'bigos', DEFAULT, 3);
+_____________________________________________________
+5.
+INSERT INTO postac VALUES (DEFAULT, 'wiking 1', 'wiking', '1970-05-12', '50');
+INSERT INTO postac VALUES (NULL, 'wiking 2', 'wiking', '1975-07-17', '45');
+INSERT INTO postac VALUES (NULL, 'wiking 3', 'wiking', '1969-12-09', '50');
+INSERT INTO postac VALUES (NULL, 'wiking 4', 'wiking', '1980-04-10', '40');
+INSERT INTO postac VALUES (NULL, 'wiking 5', 'wiking', '1997-02-03', '23');
+CREATE TABLE statek (nazwa_statku varchar(50) PRIMARY KEY, rodzaj_statku ENUM('drakkar', 'transportowy', 'handlowy'), data_wodowania DATE, max_ladownosc DECIMAL(10,2) UNSIGNED);
+INSERT INTO statek VALUES ('Smok','drakkar','2005-05-10', 200);
+INSERT INTO statek VALUES ('Orzel','transportowy','2006-05-10', 500);
+ALTER TABLE postac ADD funkcja VARCHAR(40);
+UPDATE postac SET funkcja='kapitan' WHERE id_postaci=1;
+ALTER TABLE postac ADD statek VARCHAR(40);
+ALTER TABLE postac add FOREIGN KEY (statek) REFERENCES statek (nazwa_statku);
+UPDATE postac SET statek='Orzel' WHERE postac.nazwa = 'wiking 1';
+UPDATE postac SET statek='Orzel' WHERE postac.nazwa = 'wiking 2';
+UPDATE postac SET statek='Orzel' WHERE postac.nazwa = 'wiking 3';
+UPDATE postac SET statek='Smok' WHERE postac.nazwa = 'wiking 4';
+UPDATE postac SET statek='Smok' WHERE postac.nazwa = 'wiking 5';
+UPDATE postac SET statek='Smok' WHERE postac.nazwa = 'Bjorn';
+DELETE FROM izba WHERE nazwa_izby='Spizarnia';
+DROP TABLE izba;
