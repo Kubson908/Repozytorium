@@ -1,8 +1,9 @@
+LEKCJA 1.
 1.
 CREATE TABLE postac (id_postaci INT PRIMARY KEY auto_increment, nazwa VARCHAR(40), rodzaj ENUM('wiking','ptak','kobieta'), data_ur DATE, wiek INT UNSIGNED);
-INSERT INTO postac VALUES (NULL, 'Bjorn', 'wiking', '1990-01-10', '145');
+INSERT INTO postac VALUES (NULL, 'Bjorn', 'wiking', '1990-01-10', '30');
 CREATE TABLE postac VALUES (NULL, 'Drozd', 'ptak', NULL, '1');
-CREATE TABLE postac VALUES (NULL, 'Tesciowa', 'kobieta', '1932-03-05', '80');
+CREATE TABLE postac VALUES (NULL, 'Tesciowa', 'kobieta', '1932-03-13', '80');
 UPDATE postac SET wiek=88 WHERE nazwa = 'Tesciowa';
 _____________________________________________________
 2.
@@ -23,23 +24,24 @@ CREATE TABLE przetwory (id_przetworu INT PRIMARY KEY auto_increment, rok_produkc
 INSERT INTO przetwory VALUES (NULL, DEFAULT, 1, 'bigos', DEFAULT, 3);
 _____________________________________________________
 5.
-INSERT INTO postac VALUES (DEFAULT, 'wiking 1', 'wiking', '1970-05-12', '50');
-INSERT INTO postac VALUES (NULL, 'wiking 2', 'wiking', '1975-07-17', '45');
-INSERT INTO postac VALUES (NULL, 'wiking 3', 'wiking', '1969-12-09', '50');
-INSERT INTO postac VALUES (NULL, 'wiking 4', 'wiking', '1980-04-10', '40');
-INSERT INTO postac VALUES (NULL, 'wiking 5', 'wiking', '1997-02-03', '23');
-CREATE TABLE statek (nazwa_statku varchar(50) PRIMARY KEY, rodzaj_statku ENUM('drakkar', 'transportowy', 'handlowy'), data_wodowania DATE, max_ladownosc DECIMAL(10,2) UNSIGNED);
+INSERT INTO postac VALUES (DEFAULT, 'Elrend', 'wiking', '1970-05-12', '50');
+INSERT INTO postac VALUES (NULL, 'Gunnar', 'wiking', '1975-07-17', '45');
+INSERT INTO postac VALUES (NULL, 'Hjorvarth', 'wiking', '1969-12-09', '50');
+INSERT INTO postac VALUES (NULL, 'Mord', 'wiking', '1980-04-10', '40');
+INSERT INTO postac VALUES (NULL, 'Sigurd', 'wiking', '1977-02-03', '23');
+CREATE TABLE statek (nazwa_statku varchar(50) PRIMARY KEY, rodzaj_statku ENUM('drakkar', 'langskip', 'sneka'), data_wodowania DATE, max_ladownosc DECIMAL(10,2) UNSIGNED);
 INSERT INTO statek VALUES ('Smok','drakkar','2005-05-10', 200);
-INSERT INTO statek VALUES ('Orzel','transportowy','2006-05-10', 500);
+INSERT INTO statek VALUES ('Orzel','langskip','2006-05-10', 500);
 ALTER TABLE postac ADD funkcja VARCHAR(40);
 UPDATE postac SET funkcja='kapitan' WHERE id_postaci=1;
 ALTER TABLE postac ADD statek VARCHAR(40);
 ALTER TABLE postac add FOREIGN KEY (statek) REFERENCES statek (nazwa_statku);
-UPDATE postac SET statek='Orzel' WHERE postac.nazwa = 'wiking 1';
-UPDATE postac SET statek='Orzel' WHERE postac.nazwa = 'wiking 2';
-UPDATE postac SET statek='Orzel' WHERE postac.nazwa = 'wiking 3';
-UPDATE postac SET statek='Smok' WHERE postac.nazwa = 'wiking 4';
-UPDATE postac SET statek='Smok' WHERE postac.nazwa = 'wiking 5';
-UPDATE postac SET statek='Smok' WHERE postac.nazwa = 'Bjorn';
+UPDATE postac SET statek='Orzel' WHERE nazwa = 'Elrend';
+UPDATE postac SET statek='Orzel' WHERE nazwa = 'Gunnar';
+UPDATE postac SET statek='Orzel' WHERE nazwa = 'Hjorvarth';
+UPDATE postac SET statek='Smok' WHERE nazwa = 'Mord';
+UPDATE postac SET statek='Smok' WHERE nazwa = 'Sigurd';
+UPDATE postac SET statek='Smok' WHERE nazwa = 'Bjorn';
+UPDATE postac SET statek='Smok' WHERE nazwa = 'Drozd';
 DELETE FROM izba WHERE nazwa_izby='Spizarnia';
 DROP TABLE izba;
