@@ -46,6 +46,8 @@ UPDATE postac SET statek='Smok' WHERE nazwa = 'Drozd';
 DELETE FROM izba WHERE nazwa_izby='Spizarnia';
 DROP TABLE izba;
 ____________________________________________________________________________________________________________
+
+
 LEKCJA 2
 1.
 DELETE FROM postac WHERE id_postaci > 3 ORDER BY wiek DESC LIMIT 2;
@@ -75,7 +77,6 @@ LIKE '%a') AND nazwa != 'Gertruda Nieszczera' AND nazwa != 'Tesciowa';
 UPDATE statek SET max_ladownosc = 0.7*max_ladownosc WHERE data_wodowania BETWEEN '1900-01-01' AND '2000-01-01';
 ALTER TABLE postac ADD wiek_wiekszy_niz_1000 ENUM('TAK', 'NIE') DEFAULT (if(wiek>1000, 'TAK', 'NIE'));
 UPDATE postac SET wiek_wiekszy_niz_1000 = DEFAULT;
-
 _____________________________________________________
 4.
 ALTER TABLE postac MODIFY rodzaj ENUM('wiking', 'ptak', 'kobieta', 'syrena', 'waz');
@@ -93,3 +94,50 @@ DROP TABLE statek;
 CREATE TABLE zwierz(id INT PRIMARY KEY auto_increment, nazwa VARCHAR(40), wiek INT);
 INSERT INTO zwierz VALUES(NULL, 'Drozd', 20);
 INSERT INTO zwierz VALUES(NULL, 'Loko', 28);
+____________________________________________________________________________________________________________
+
+
+LEKCJA 3.
+1.
+CREATE TABLE kreatura AS SELECT * FROM wikingowie.kreatura;
+ALTER TABLE kreatura MODIFY idKreatury INT PRIMARY KEY auto_increment;
+CREATE TABLE zasob AS SELECT * FROM wikingowie.zasob;
+ALTER TABLE zasob MODIFY idZasobu INT PRIMARY KEY;
+CREATE TABLE ekwipunek  AS SELECT * FROM wikingowie.ekwipunek;
+ALTER TABLE ekwipunek MODIFY idEkwipunku INT PRIMARY KEY;
+ALTER TABLE ekwipunek ADD FOREIGN KEY (idKreatury) REFERENCES kreatura(idKreatury);
+ALTER TABLE ekwipunek ADD FOREIGN KEY (idZasobu) REFERENCES zasob(idZasobu);
+SELECT * FROM zasob;
+SELECT * FROM zasob WHERE rodzaj = 'jedzenie';
+SELECT idZasobu, ilosc FROM ekwipunek WHERE idKreatury IN(1, 3, 5);
+_____________________________________________________
+2.
+SELECT * FROM kreatura WHERE rodzaj NOT IN ('wiedzma');
+SELECT * FROM zasob WHERE waga BETWEEN 2 AND 5;
+SELECT * FROM kreatura WHERE (nazwa LIKE '%or%' OR nazwa LIKE '%or' OR nazwa LIKE 'Or%') AND udzwig BETWEEN 30 AND 70;
+_____________________________________________________
+3.
+SELECT * FROM zasob WHERE MONTH(dataPozyskania) BETWEEN 7 AND 8;
+SELECT * FROM zasob WHERE rodzaj IS NOT NULL ORDER BY waga;
+SELECT * FROM kreatura ORDER BY dataUr LIMIT 5;
+_____________________________________________________
+4.
+SELECT DISTINCT rodzaj FROM zasob;
+SELECT CONCAT (nazwa, "-" , rodzaj) AS 'nazwa-rodzaj' FROM kreatura WHERE rodzaj LIKE 'wi%';
+SELECT *, ilosc*waga AS wagaCalkowita FROM zasob WHERE YEAR(dataPozyskania) BETWEEN 2000 AND 2007;
+_____________________________________________________
+5.
+SELECT *, 0.7*waga*ilosc AS masaNetto, 0.3*waga*ilosc AS wagaOdpadkow FROM zasob WHERE rodzaj = 'jedzenie';
+SELECT * FROM zasob WHERE rodzaj IS NULL;
+SELECT DISTINCT rodzaj, nazwa FROM zasob WHERE nazwa LIKE 'Ba%' OR nazwa LIKE '%os' OR   DER BY nazwa;
+____________________________________________________________________________________________________________
+
+
+LEKCJA 4.
+1.
+SELECT AVG(waga ) AS sredniaWagaWikingow FROM kreatura WHERE rodzaj = 'wiking';
+SELECT rodzaj, AVG(waga) AS sredniaWaga, COUNT(rodzaj) AS liczbaKreatur FROM kreatura GROUP BY rodzaj;
+SELECT rodzaj, AVG(2020-YEAR(dataUr)) AS sredniWiek FROM kreatura GROUP BY rodzaj;
+_____________________________________________________
+2.
+SELECT rodzaj, SUM(waga) AS sumaWag FROM zasob GROUP BY rodzaj;
