@@ -129,7 +129,7 @@ _____________________________________________________
 5.
 SELECT *, 0.7*waga*ilosc AS masaNetto, 0.3*waga*ilosc AS wagaOdpadkow FROM zasob WHERE rodzaj = 'jedzenie';
 SELECT * FROM zasob WHERE rodzaj IS NULL;
-SELECT DISTINCT rodzaj, nazwa FROM zasob WHERE nazwa LIKE 'Ba%' OR nazwa LIKE '%os' OR   DER BY nazwa;
+SELECT DISTINCT rodzaj, nazwa FROM zasob WHERE nazwa LIKE 'Ba%' OR nazwa LIKE '%os' ORDER BY nazwa;
 ____________________________________________________________________________________________________________
 
 
@@ -140,4 +140,19 @@ SELECT rodzaj, AVG(waga) AS sredniaWaga, COUNT(rodzaj) AS liczbaKreatur FROM kre
 SELECT rodzaj, AVG(2020-YEAR(dataUr)) AS sredniWiek FROM kreatura GROUP BY rodzaj;
 _____________________________________________________
 2.
-SELECT rodzaj, SUM(waga) AS sumaWag FROM zasob GROUP BY rodzaj;
+SELECT rodzaj, SUM(waga*ilosc) AS sumaWag FROM zasob GROUP BY rodzaj;
+SELECT nazwa, SUM(waga*ilosc)/SUM(ilosc) AS sredniaWaga FROM zasob GROUP BY nazwa HAVING SUM(ilosc) >= 4 AND SUM(waga*ilosc) > 10;
+SELECT DISTINCT rodzaj, COUNT(nazwa) AS ileRoznychNazw FROM zasob GROUP BY rodzaj HAVING MIN(ilosc) > 1;
+_____________________________________________________
+3.
+SELECT nazwa, idEkwipunku, ilosc AS iloscZasobow FROM kreatura JOIN ekwipunek ON kreatura.idKreatury = ekwipunek.idKreatury;
+SELECT k.nazwa AS kreatura, z.nazwa AS nazwaZasobu FROM (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) JOIN kreatura k ON k.idKreatury = e.idKreatury;
+SELECT nazwa, idEkwipunku FROM kreatura LEFT OUTER JOIN ekwipunek USING(idKreatury) WHERE idEkwipunku IS NULL;
+_____________________________________________________
+4.
+SELECT k.nazwa AS kreatura, z.nazwa AS nazwaZasobu FROM kreatura k JOIN (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) ON k.idKreatury = e.idKreatury WHERE k.rodzaj = 'wiking' AND YEAR(k.dataUr) BETWEEN 1670 AND 1679;
+SELECT k.nazwa AS kreatura, z.nazwa AS nazwaZasobu FROM kreatura k JOIN (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) ON k.idKreatury = e.idKreatury WHERE z.rodzaj = 'jedzenie' ORDER BY dataUr DESC LIMIT 5;
+SELECT a.nazwa, b.nazwa FROM kreatura a JOIN kreatura b WHERE b.idKreatury - a.idKreatury = 5;
+_____________________________________________________
+5.
+SELECT k.rodzaj, SUM(z.waga*z.ilosc)/SUM(z.ilosc) AS sredniaWagaZasobow FROM kreatura k JOIN (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) ON k.idKreatury = e.Idkreatury GROUP BY k.rodzaj HAVING k.rodzaj NOT IN ('waz', 'malpa') AND SUM(e.ilosc) < 30;
