@@ -152,7 +152,8 @@ _____________________________________________________
 4.
 SELECT k.nazwa AS kreatura, z.nazwa AS nazwaZasobu FROM kreatura k JOIN (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) ON k.idKreatury = e.idKreatury WHERE k.rodzaj = 'wiking' AND YEAR(k.dataUr) BETWEEN 1670 AND 1679;
 SELECT k.nazwa AS kreatura, z.nazwa AS nazwaZasobu FROM kreatura k JOIN (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) ON k.idKreatury = e.idKreatury WHERE z.rodzaj = 'jedzenie' ORDER BY dataUr DESC LIMIT 5;
-SELECT a.nazwa, b.nazwa FROM kreatura a JOIN kreatura b WHERE b.idKreatury - a.idKreatury = 5;
+SELECT CONCAT(a.nazwa, " - ", b.nazwa) AS nazwy FROM kreatura a JOIN kreatura b WHERE b.idKreatury - a.idKreatury = 5;
 _____________________________________________________
 5.
 SELECT k.rodzaj, SUM(z.waga*z.ilosc)/SUM(z.ilosc) AS sredniaWagaZasobow FROM kreatura k JOIN (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) ON k.idKreatury = e.Idkreatury GROUP BY k.rodzaj HAVING k.rodzaj NOT IN ('waz', 'malpa') AND SUM(e.ilosc) < 30;
+SELECT rodzaj, MAX(CONCAT(dataUr, " ", nazwa)) AS najmlodszaKreatura, MIN(CONCAT(dataUr, " ", nazwa)) AS najstarszaKreatura FROM kreatura GROUP BY rodzaj;
