@@ -157,3 +157,28 @@ _____________________________________________________
 5.
 SELECT k.rodzaj, SUM(z.waga*z.ilosc)/SUM(z.ilosc) AS sredniaWagaZasobow FROM kreatura k JOIN (zasob z JOIN ekwipunek e ON z.idZasobu = e.idZasobu) ON k.idKreatury = e.Idkreatury GROUP BY k.rodzaj HAVING k.rodzaj NOT IN ('waz', 'malpa') AND SUM(e.ilosc) < 30;
 SELECT rodzaj, MAX(CONCAT(dataUr, " ", nazwa)) AS najmlodszaKreatura, MIN(CONCAT(dataUr, " ", nazwa)) AS najstarszaKreatura FROM kreatura GROUP BY rodzaj;
+____________________________________________________________________________________________________________
+
+
+LEKCJA 5.
+1.
+CREATE TABLE kreatura AS SELECT * FROM wikingowie.kreatura;
+CREATE TABLE etapy_wyprawy AS SELECT * FROM wikingowie.etapy_wyprawy;
+CREATE TABLE sektor AS SELECT * FROM wikingowie.sektor;
+CREATE TABLE wyprawa AS SELECT * FROM wikingowie.wyprawa;
+CREATE TABLE uczestnicy AS SELECT * FROM wikingowie.uczestnicy;
+ALTER TABLE uczestnicy ADD PRIMARY KEY (id_wyprawy, id_uczestnika);
+ALTER TABLE uczestnicy ADD FOREIGN KEY (id_wyprawy) REFERENCES wyprawa(id_wyprawy);
+ALTER TABLE uczestnicy ADD FOREIGN KEY (id_uczestnika) REFERENCES kreatura(idKreatury);
+ALTER TABLE etapy_wyprawy MODIFY idEtapu int NOT NULL PRIMARY KEY auto_increment;
+ALTER TABLE sektor MODIFY id_sektora int NOT NULL PRIMARY KEY;
+ALTER TABLE wyprawa MODIFY id_wyprawy int NOT NULL PRIMARY KEY auto_increment;
+ALTER TABLE wyprawa ADD FOREIGN KEY (kierownik) REFERENCES kreatura(idKreatury) ON DELETE CASCADE;
+ALTER TABLE etapy_wyprawy ADD FOREIGN KEY (sektor) REFERENCES sektor(id_sektora);
+ALTER TABLE etapy_wyprawy ADD FOREIGN KEY (idWyprawy) REFERENCES wyprawa(id_wyprawy);
+SELECT nazwa AS brak_wyprawy FROM kreatura LEFT JOIN uczestnicy ON uczestnicy.id_uzestnika = kreatura.idKreatury WHERE id_wyprawy IS NULL;
+SELECT w.nazwa, SUM(e.ilosc) AS sumaIlosciEkwipunku FROM wyprawa w JOIN (uczestnicy u JOIN ekwipunek e ON e.idKreatury = u.id_uczestnika) ON w.id_wyprawy = u.id_wyprawy GROUP BY w.nazwa;
+_____________________________________________________
+2.
+SELECT w.nazwa, COUNT(id_uczestnika) AS liczbaUczestnikow, GROUP_CONCAT(" ", k.nazwa) AS nazwyUczesntikow FROM wyprawa w JOIN (uczestnicy u JOIN kreatura k ON u.id_uczestnika = k.idKreatury) ON u.id_wyprawy = w.id_wyprawy GROUP BY w.nazwa;
+SELECT e.idEtapu, s.nazwa AS nazwaLokacji, k.nazwa AS kierownik FROM (etapy_wyprawy e JOIN (wyprawa w JOIN kreatura k ON k.idKreatury = w.kierownik) ON e.idWyprawy = w.id_wyprawy) JOIN sektor s ON sektor = s.id_sektora ORDER BY data_rozpoczecia, kolejnosc;
