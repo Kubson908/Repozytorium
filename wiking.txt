@@ -189,3 +189,7 @@ SELECT k.nazwa, IF(COUNT(id_wyprawy)>0, 'bral udzial w wyprawie', 'nie bral udzi
 _____________________________________________________
 4.
 SELECT w.nazwa, SUM(length(dziennik)) AS SumaZnakowDziennika FROM wyprawa w JOIN etapy_wyprawy ON idWyprawy = w.id_wyprawy GROUP BY w.nazwa HAVING(SumaZnakowDziennika < 400);
+SELECT id_wyprawy, SUM(zasob.waga*ekwipunek.ilosc)/COUNT(id_uczestnika) AS sredniaWagaZasobow FROM uczestnicy JOIN (ekwipunek JOIN zasob ON ekwipunek.idZasobu = zasob.idZasobu) ON uczestnicy.id_uczestnika = ekwipunek.idKreatury GROUP BY id_wyprawy;
+_____________________________________________________
+5.
+
