@@ -192,4 +192,9 @@ SELECT w.nazwa, SUM(length(dziennik)) AS SumaZnakowDziennika FROM wyprawa w JOIN
 SELECT id_wyprawy, SUM(zasob.waga*ekwipunek.ilosc)/COUNT(id_uczestnika) AS sredniaWagaZasobow FROM uczestnicy JOIN (ekwipunek JOIN zasob ON ekwipunek.idZasobu = zasob.idZasobu) ON uczestnicy.id_uczestnika = ekwipunek.idKreatury GROUP BY id_wyprawy;
 _____________________________________________________
 5.
+SELECT w.nazwa AS wyprawa, k.nazwa AS nazwa_postaci, datediff(w.data_rozpoczecia, k.dataUr) AS wiek_w_dniach FROM (wyprawa w JOIN (SELECT idWyprawy, sektor from etapy_wyprawy WHERE sektor = 7) z on z.idWyprawy = w.id_wyprawy) JOIN uczestnicy u  ON u.id_wyprawy = w.id_wyprawy JOIN kreatura k ON k.idKreatury = u.id_uczestnika ORDER BY w.id_wyprawy;
+____________________________________________________________________________________________________________
 
+
+Lekcja 6.
+1
