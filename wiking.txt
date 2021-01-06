@@ -197,4 +197,31 @@ ________________________________________________________________________________
 
 
 Lekcja 6.
-1
+
+1. 
+DELIMITER //
+CREATE TRIGGER check_waga 
+BEFORE UPDATE 
+ON kreatura	
+FOR EACH ROW
+BEGIN
+	IF(NEW.waga < 0) THEN 
+    SIGNAL SQLSTATE '45000' set message_text='ERROR';
+    END IF;
+END;
+//
+DELIMITER ;
+
+2.
+CREATE TABLE archiwum_wypraw (id_wyprawy INT PRIMARY KEY NOT NULL, nazwa VARCHAR(200), data_rozpoczecia DATE, data_zakonczenia DATE, kierownik VARCHAR(30));
+DELIMITER //
+CREATE TRIGGER bd_wyprawa 
+BEFORE DELETE 
+ON wyprawa 
+FOR EACH ROW 
+BEGIN
+	INSERT INTO archiwum_wypraw(id_wyprawy, nazwa, data_rozpoczecia, data_zakonczenia, kierownik) 
+    SELECT id_wyprawy, wyprawa.nazwa, data_rozpoczecia, data_zakonczenia, kreatura.nazwa 
+    FROM wyprawa JOIN kreatura ON wyprawa.kierownik = kreatura.idKreatury WHERE OLD.id_wyprawy = id_wyprawy;
+END //
+DELIMITER ;

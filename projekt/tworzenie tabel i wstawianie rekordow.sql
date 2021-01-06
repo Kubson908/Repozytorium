@@ -1,0 +1,100 @@
+# tworzenie tabel
+CREATE TABLE klient(idKlienta INT PRIMARY KEY NOT NULL auto_increment, imie VARCHAR(60), nazwisko VARCHAR(70), dataUr DATE);
+CREATE TABLE asortyment(idProduktu INT PRIMARY KEY NOT NULL auto_increment, nazwa VARCHAR(70), rodzaj ENUM('alkohol','napoj','jedzenie','deser'), cena INT NOT NULL, ilosc INT UNSIGNED);
+CREATE TABLE pracownik(idPracownika INT PRIMARY KEY NOT NULL auto_increment, imie VARCHAR(60), nazwisko VARCHAR(70), dataUr DATE, PESEL CHAR(11), stanowisko ENUM('kelner','barman','kucharz'), pensja DECIMAL(10,2));
+CREATE TABLE zamowienie(idZamowienia INT PRIMARY KEY NOT NULL auto_increment);
+CREATE TABLE dostawa(idDostawy INT PRIMARY KEY NOT NULL auto_increment);
+
+# modyfikacja tabel
+ALTER TABLE dostawa ADD idProduktu INT;
+ALTER TABLE dostawa ADD ilosc INT UNSIGNED;
+ALTER TABLE dostawa ADD FOREIGN KEY (idProduktu) REFERENCES asortyment (idProduktu) ON UPDATE CASCADE;
+ALTER TABLE dostawa ADD data_dostawy DATE;
+ALTER TABLE zamowienie ADD idKlienta INT;
+ALTER TABLE zamowienie ADD idPracownika INT;
+ALTER TABLE zamowienie ADD idProduktu INT;
+ALTER TABLE zamowienie ADD FOREIGN KEY (idKlienta) REFERENCES klient (idKlienta) ON UPDATE CASCADE;
+ALTER TABLE zamowienie ADD FOREIGN KEY (idPracownika) REFERENCES pracownik (idPracownika) ON UPDATE CASCADE;
+ALTER TABLE zamowienie ADD FOREIGN KEY (idProduktu) REFERENCES asortyment (idProduktu) ON UPDATE CASCADE;
+ALTER TABLE zamowienie ADD data_zamowienia DATE;
+
+# wstawianie rekordow do poszczegolnych tabel
+INSERT INTO asortyment VALUES (NULL, 'kieliszek_wodki', 'alkohol', 3, 40);
+INSERT INTO asortyment VALUES (NULL, 'male_piwo', 'alkohol', 5, 40);
+INSERT INTO asortyment VALUES (NULL, 'duze_piwo', 'alkohol', 8, 50);
+INSERT INTO asortyment VALUES (NULL, 'whiskey', 'alkohol', 10, 30);
+INSERT INTO asortyment VALUES (NULL, 'sok_pomaranczowy', 'napoj', 7, 50);
+INSERT INTO asortyment VALUES (NULL, 'woda_mineralna', 'napoj', 2, 45);
+INSERT INTO asortyment VALUES (NULL, 'cola', 'napoj', 6, 30);
+INSERT INTO asortyment VALUES (NULL, 'frytki', 'jedzenie', 4, 35);
+INSERT INTO asortyment VALUES (NULL, 'schabowy_z_ziemniakami', 'jedzenie', 12, 40);
+INSERT INTO asortyment VALUES (NULL, 'zupa_pomidorowa', 'jedzenie', 9, 35);
+INSERT INTO asortyment VALUES (NULL, 'szarlotka', 'deser', 6, 30);
+INSERT INTO asortyment VALUES (NULL, 'lody', 'deser', 5, 45);
+INSERT INTO asortyment VALUES (NULL, 'gofry', 'deser', 8, 35);
+
+INSERT INTO pracownik VALUES (NULL, 'Krzysztof', 'Nowak', '1985-03-12', 85031202347, 'kelner', 3000);
+INSERT INTO pracownik VALUES (NULL, 'Katarzyna', 'Frankowska', '1990-05-24', 90052412750, 'kucharz', 3500);
+INSERT INTO pracownik VALUES (NULL, 'Adam', 'Wesoly', '1989-10-11', 89101108253, 'barman', 3200);
+INSERT INTO pracownik VALUES (NULL, 'Grzegorz', 'Kowalski', '1977-07-15', 77071521325, 'kucharz', 3500);
+INSERT INTO pracownik VALUES (NULL, 'Anna', 'Kacprowicz', '1983-01-27', 83012756792, 'kelner', 3000);
+INSERT INTO pracownik VALUES (NULL, 'Zofia', 'Fajna', '1992-09-09', 92090986576, 'barman', 3200);
+INSERT INTO pracownik VALUES (NULL, 'Marta', 'Mierzejewska', '1996-06-19', '96061976870', 'kelner', 3000);
+INSERT INTO pracownik VALUES (NULL, 'Bartosz', 'Kot', '1984-02-06', '84020656421', 'kucharz', 3500);
+
+INSERT INTO klient VALUES (NULL, 'Zbigniew', 'Witkowski', '1975-01-20');
+INSERT INTO klient VALUES (NULL, 'Piotr', 'Piotrowski', '1985-10-23');
+INSERT INTO klient VALUES (NULL, 'Janusz', 'Urbanski', '1993-12-13');
+INSERT INTO klient VALUES (NULL, 'Magdalena', 'Lipinska', '1990-11-21');
+INSERT INTO klient VALUES (NULL, 'Sylwester', 'Spalony', '1971-03-10');
+INSERT INTO klient VALUES (NULL, 'Weronika', 'Tatarska', '1985-10-10');
+INSERT INTO klient VALUES (NULL, 'Amelia', 'Zabielska', '1978-12-30');
+INSERT INTO klient VALUES (NULL, 'Anita', 'Nitkowska', '1982-10-29');
+INSERT INTO klient VALUES (NULL, 'Seweryn', 'Danielski', '1999-05-01');
+INSERT INTO klient VALUES (NULL, 'Kacper', 'Zielony', '2005-04-24');
+INSERT INTO klient VALUES (NULL, 'Tomasz', 'Awangardowy', '1976-09-14');
+INSERT INTO klient VALUES (NULL, 'Zenon', 'Kruk', '1970-10-16');
+INSERT INTO klient VALUES (NULL, 'Krystyna', 'Wolna', '1977-08-23');
+INSERT INTO klient VALUES (NULL, 'Julia', 'Piatek', '2004-05-13');
+INSERT INTO klient VALUES (NULL, 'Lukasz', 'Wtorek', '2007-10-02');
+INSERT INTO klient VALUES (NULL, 'Agata', 'Slowikowska', '1989-12-12');
+INSERT INTO klient VALUES (NULL, 'Andrzej', 'Poznanski', '1976-07-01');
+INSERT INTO klient VALUES (NULL, 'Helena' 'Jedrzejczyk', '1972-03-28');
+
+INSERT INTO dostawa VALUES (NULL, 3, '2020-12-01', 15);
+INSERT INTO dostawa VALUES (NULL, 5, '2020-12-04', 20);
+INSERT INTO dostawa VALUES (NULL, 8, '2020-12-08', 40);
+INSERT INTO dostawa VALUES (NULL, 1, '2020-12-10', 40);
+INSERT INTO dostawa VALUES (NULL, 4, '2020-12-15', 25);
+INSERT INTO dostawa VALUES (NULL, 10, '2020-12-19', 20);
+INSERT INTO dostawa VALUES (NULL, 7, '2020-12-28', 30);
+INSERT INTO dostawa VALUES (NULL, 6, '2020-12-31', 15);
+INSERT INTO dostawa VALUES (NULL, 2, '2020-12-31', 25);
+INSERT INTO dostawa VALUES (NULL, 9, '2021-01-02', 15);
+INSERT INTO dostawa VALUES (NULL, 11, '2021-01-05', 30);
+
+INSERT INTO zamowienie VALUES (1, 1, 3, 4, '2020-12-01', 3);
+INSERT INTO zamowienie VALUES (2, 5, 6, 2, '2020-12-01', 10);
+INSERT INTO zamowienie VALUES (3, 8, 7, 10, '2020-12-02', 2);
+INSERT INTO zamowienie VALUES (4, 10, 1, 13, '2020-12-03', 7);
+INSERT INTO zamowienie VALUES (5, 11, 5, 6, '2020-12-03', 4);
+INSERT INTO zamowienie VALUES (6, 17, 3, 7, '2020-12-05', 3);
+INSERT INTO zamowienie VALUES (7, 2, 1, 11, '2020-12-05', 8);
+INSERT INTO zamowienie VALUES (8, 12, 3, 1, '2020-12-06', 10);
+INSERT INTO zamowienie VALUES (9, 3, 5, 8, '2020-12-09', 20);
+INSERT INTO zamowienie VALUES (10, 9, 6, 9, '2020-12-10', 2);
+INSERT INTO zamowienie VALUES (11, 13, 3, 5, '2020-12-11', 6);
+INSERT INTO zamowienie VALUES (12, 16, 1, 3, '2020-12-11', 10);
+INSERT INTO zamowienie VALUES (13, 4, 7, 12, '2020-12-12', 5);
+INSERT INTO zamowienie VALUES (14, 6, 7, 9, '2020-12-14', 2);
+INSERT INTO zamowienie VALUES (15, 7, 3, 1, '2020-12-16', 17);
+INSERT INTO zamowienie VALUES (16, 9, 3, 3, '2020-12-17', 7);
+INSERT INTO zamowienie VALUES (17, 14, 6, 12, '2020-12-20', 4);
+INSERT INTO zamowienie VALUES (18, 3, 3, 2, '2020-12-22', 7);
+INSERT INTO zamowienie VALUES (19, 4, 5, 13, '2020-12-28', 8);
+INSERT INTO zamowienie VALUES (20, 1, 6, 1, '2020-12-31', 25);
+INSERT INTO zamowienie VALUES (21, 8, 6, 2, '2020-12-31', 10);
+INSERT INTO zamowienie VALUES (22, 11, 3, 3, '2020-12-31', 8);
+INSERT INTO zamowienie VALUES (23, 14, 3, 5, '2020-12-31', 5);
+INSERT INTO zamowienie VALUES (24, 17, 7, 5, '2021-01-03', 6);
+INSERT INTO zamowienie VALUES (25, 15, 6, 7, '2021-01-04', 2);

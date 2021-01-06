@@ -1,0 +1,5 @@
+Projekt bazy danych pubu przechowuje informacje o asortymencie, pracownikach, klientach, zamowieniach i dostawach towaru.
+Tabele są połączone za pomocą kluczy obcych, w każdej jest kilka lub kilkanascie rekordow. 
+W bazie znajduje się również 10 widoków utworzonych jako zapytania. 
+Baza zawiera 3 wyzwalacze, 1 procedurę i 1 funkcję. 
+Kody wszystkich elementów są zapisane w plikach .sql.
