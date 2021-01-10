@@ -211,7 +211,7 @@ BEGIN
 END;
 //
 DELIMITER ;
-
+_____________________________________________________
 2.
 CREATE TABLE archiwum_wypraw (id_wyprawy INT PRIMARY KEY NOT NULL, nazwa VARCHAR(200), data_rozpoczecia DATE, data_zakonczenia DATE, kierownik VARCHAR(30));
 DELIMITER //
@@ -225,3 +225,29 @@ BEGIN
     FROM wyprawa JOIN kreatura ON wyprawa.kierownik = kreatura.idKreatury WHERE OLD.id_wyprawy = id_wyprawy;
 END //
 DELIMITER ;
+_____________________________________________________
+3.
+DELIMITER // 
+CREATE PROCEDURE eliksir_sily (IN id INT)
+BEGIN
+    UPDATE kreatura SET udzwig = 1.2 * udzwig WHERE idKreatury = id;
+END //
+DELIMITER ;
+
+
+_____________________________________________________
+4.
+1) CREATE TABLE system_alarmowy (id_alarmu INT PRIMARY KEY NOT NULL auto_increment, wiadomosc VARCHAR(255));
+2)
+DELIMITER // 
+CREATE TRIGGER alarm 
+AFTER INSERT ON wyprawa 
+FOR EACH ROW 
+BEGIN
+	IF uczestnicy.id_uczestnika = 14 
+		THEN INSERT INTO system_alarmowy(wiadomosc) 
+        VALUES ('Tesciowa nadchodzi !!!');
+        END IF;
+END //
+DELIMITER ;
+
